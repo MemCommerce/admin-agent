@@ -18,7 +18,7 @@ async def process_message(mcp_server: MCPServer, chat_req: ChatRequest) -> ChatR
         messages and similar.
         """,
         mcp_servers=[mcp_server],
-        model_settings=ModelSettings(tool_choice="required"),
+        model_settings=ModelSettings(tool_choice="auto"),
     )
     is_new = (
         not chat_req.conversation_id
