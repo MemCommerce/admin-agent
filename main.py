@@ -5,6 +5,7 @@ from agents.mcp import MCPServerStreamableHttp
 
 from schemas import ChatRequest, ChatResponse
 from admin_agent import process_message
+from config import ADMIN_MCP_URL
 
 app = FastAPI()
 
@@ -14,7 +15,7 @@ async def post_chat_message(chat_req: ChatRequest):
     async with MCPServerStreamableHttp(
         name="Streamable MCP Admin server",
         params={
-            "url": "http://localhost:8000/mcp",
+            "url": ADMIN_MCP_URL,
         },
     ) as server:
         trace_id = gen_trace_id()

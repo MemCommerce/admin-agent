@@ -10,6 +10,7 @@ dependencies = [
     { name = "black" },
     { name = "fastapi" },
     { name = "openai-agents" },
+    { name = "python-dotenv" },
     { name = "uvicorn" },
 ]
 
@@ -18,6 +19,7 @@ requires-dist = [
     { name = "black", specifier = ">=25.1.0" },
     { name = "fastapi", specifier = ">=0.115.13" },
     { name = "openai-agents", specifier = ">=0.0.19" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "uvicorn", specifier = ">=0.34.3" },
 ]
 
