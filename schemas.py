@@ -23,4 +23,4 @@ class DescriptionReq(BaseModel):
     category: str
     primary_keyword: str
     secondary_keywords: list[str]
-    target_audence: list[str]
+    target_audience: list[str]
