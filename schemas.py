@@ -15,3 +15,12 @@ class ChatResponse(BaseModel):
 class ChatRequest(BaseModel):
     conversation_id: Optional[str] = None
     message: str
+
+
+class DescriptionReq(BaseModel):
+    name: str
+    brand: str
+    category: str
+    primary_keyword: str
+    secondary_keywords: list[str]
+    target_audence: list[str]

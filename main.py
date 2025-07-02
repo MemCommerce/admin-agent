@@ -3,8 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from agents import gen_trace_id, trace
 from agents.mcp import MCPServerStreamableHttp
 
-from schemas import ChatRequest, ChatResponse
+from schemas import ChatRequest, ChatResponse, DescriptionReq
 from admin_agent import process_message
+from create_description import create_ai_description
 from config import ADMIN_MCP_URL
 
 app = FastAPI()
@@ -25,6 +26,14 @@ async def post_chat_message(chat_req: ChatRequest):
             )
             resp = await process_message(server, chat_req)
             return resp
+
+
+@app.post(
+    "/product-description", response_model=str, status_code=status.HTTP_201_CREATED
+)
+async def post_product_description(product_details: DescriptionReq):
+    new_description = await create_ai_description(product_details)
+    return new_description
 
 
 app.add_middleware(
