@@ -12,11 +12,13 @@ app = FastAPI()
 
 @app.post("/chat", response_model=ChatResponse, status_code=status.HTTP_201_CREATED)
 async def post_chat_message(chat_req: ChatRequest):
+    print(ADMIN_MCP_URL)
     async with MCPServerStreamableHttp(
         name="Streamable MCP Admin server",
         params={
             "url": ADMIN_MCP_URL,
         },
+        client_session_timeout_seconds=30,
     ) as server:
         trace_id = gen_trace_id()
         with trace(workflow_name="Admin Agent workflow", trace_id=trace_id):

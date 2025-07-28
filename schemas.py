@@ -15,3 +15,4 @@ class ChatResponse(BaseModel):
 class ChatRequest(BaseModel):
     conversation_id: Optional[str] = None
     message: str
+    images_urls: Optional[list[str]] = None
