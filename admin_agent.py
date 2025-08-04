@@ -97,6 +97,9 @@ async def process_message(mcp_server: MCPServer, chat_req: ChatRequest) -> ChatR
 
     agent_input = format_agent_input(chat_req)
 
+    print("items")
+    print(await session.get_items())
+
     result = await Runner.run(
         starting_agent=agent, input=agent_input, session=session
     )
