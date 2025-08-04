@@ -47,29 +47,14 @@ async def process_image(image_url: str, prompt: str) -> str:
     return response.output_text
 
 
-def format_agent_input(chat_req: ChatRequest):
+def format_agent_input(chat_req: ChatRequest) -> str:
     if not chat_req.images_urls:
-        content = [{
-            "type": "input_text",
-            "text": chat_req.message
-        }]
-    
+        text = chat_req.message
     else:
         images_text = "\n".join([f"Image url: {url}" for url in chat_req.images_urls]) 
+        text = f"{chat_req.message} \n {images_text}"
 
-        content = [{
-            "type": "input_text",
-            "text": f"{chat_req.message} \n {images_text}"
-        }]
-
-    messages = [
-        {
-            "role": "user",
-            "content": content
-        }
-    ]
-
-    return messages
+    return text
 
 
 async def process_message(mcp_server: MCPServer, chat_req: ChatRequest) -> ChatResponse:
@@ -92,6 +77,8 @@ async def process_message(mcp_server: MCPServer, chat_req: ChatRequest) -> ChatR
     conversation_id = (
         chat_req.conversation_id if chat_req.conversation_id else str(uuid4())
     )
+
+    print("Before session")
 
     session = MongoDBSession(conversation_id, db)
 

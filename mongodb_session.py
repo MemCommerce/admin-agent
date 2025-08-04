@@ -11,7 +11,7 @@ from typing import Any
 class MongoDBSession(Session):
     """MongoDB-based implementation of session storage."""
 
-    _initialized = False
+    _is_initialized = False
 
     def __init__(
         self,
@@ -55,7 +55,7 @@ class MongoDBSession(Session):
 
     async def _ensure_initialized(self) -> None:
         """Ensure the database schema is initialized."""
-        if not self._initialized:
+        if not self._is_initialized:
             await self._init_db()
 
     async def get_items(self, limit: int | None = None) -> list[TResponseInputItem]:
@@ -153,13 +153,13 @@ class MongoDBSession(Session):
         await self.messages_collection.delete_many({"session_id": self.session_id})
         await self.sessions_collection.delete_one({"session_id": self.session_id})
 
-    async def close(self) -> None:
-        await self.db.client.close()
+    # async def close(self) -> None:
+    #     await self.db.client.close()
 
-    async def __aenter__(self):
-        """Async context manager entry."""
-        return self
+    # async def __aenter__(self):
+    #     """Async context manager entry."""
+    #     return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Async context manager exit."""
-        await self.close()
+    # async def __aexit__(self, exc_type, exc_val, exc_tb):
+    #     """Async context manager exit."""
+    #     await self.close()
