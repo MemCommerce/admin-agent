@@ -8,6 +8,7 @@ dependencies = [
     "black>=25.1.0",
     "fastapi>=0.115.13",
     "openai-agents>=0.2.3",
+    "pymongo>=4.13.2",
     "python-dotenv>=1.1.1",
     "uvicorn>=0.34.3",
 ]

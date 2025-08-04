@@ -6,7 +6,8 @@ from agents.model_settings import ModelSettings
 from openai import OpenAI
 
 from schemas import ChatResponse, ChatRequest, MessageResponse
-from memory import conversation_store
+from mongo_db import db
+from mongodb_session import MongoDBSession
 
 
 @function_tool
@@ -87,31 +88,20 @@ async def process_message(mcp_server: MCPServer, chat_req: ChatRequest) -> ChatR
         model_settings=ModelSettings(tool_choice="auto"),
         tools=[process_image]
     )
-    is_new = (
-        not chat_req.conversation_id
-        or conversation_store.get(chat_req.conversation_id) is None
+
+    conversation_id = (
+        chat_req.conversation_id if chat_req.conversation_id else str(uuid4())
     )
 
-    if is_new:
-        conversation_id: str = uuid4().hex
-        state = []
-    else:
-        conversation_id = chat_req.conversation_id  # type: ignore
-        state = conversation_store.get(conversation_id)
+    session = MongoDBSession(conversation_id, db)
 
     agent_input = format_agent_input(chat_req)
 
-    print(agent_input)
-
     result = await Runner.run(
-        starting_agent=agent, input=agent_input, context=state
+        starting_agent=agent, input=agent_input, session=session
     )
 
     output = result.final_output
-    state.append(agent_input)
-    state.append({"role": "assistant", "content": output})
-
-    conversation_store.save(conversation_id, state)
 
     return ChatResponse(
         messages=[MessageResponse(content=output)], conversation_id=conversation_id
